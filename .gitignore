@@ -1,0 +1,65 @@
+# ==========================
+# Visual Studio
+# ==========================
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ==========================
+# Build Output
+# ==========================
+bin/
+obj/
+Debug/
+Release/
+
+# Compiled files (release builds will be separate)
+*.dll
+*.pdb
+*.mdb
+
+# ==========================
+# IDEs
+# ==========================
+.idea/
+.vscode/
+
+# ==========================
+# NuGet / Packages
+# ==========================
+packages/
+*.nupkg
+
+# ==========================
+# Logs / Temporary Files
+# ==========================
+*.log
+*.tmp
+*.temp
+
+# ==========================
+# Windows Files
+# ==========================
+Thumbs.db
+Desktop.ini
+
+# ==========================
+# SPT / Tarkov Generated Files
+# ==========================
+Logs/
+Cache/
+
+# ==========================
+# Release / Packaging
+# ==========================
+*.zip
+*.7z
+*.rar
+
+# ==========================
+# Local Test Files
+# ==========================
+Test/
+Testing/
