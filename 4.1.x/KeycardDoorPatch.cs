@@ -2,24 +2,29 @@
 using EFT;
 using EFT.Interactive;
 using EFT.InventoryLogic;
+using EFT.UI;
 using HarmonyLib;
 
 namespace AutoKeycard
 {
-    // Replaces the default keycard door interaction options with a custom action.
+    // Adds a custom keycard door interaction while preserving EFT's existing interaction system.
     // This allows AutoKeycard to automatically select and use the correct keycard.
-    [HarmonyPatch(typeof(GetActionsClass))]
+    [HarmonyPatch(typeof(InteractionContextHelper))]
     public class KeycardDoorPatch
     {
-        // EFT uses this method to generate available interactions for objects.
-        // Allows me to modify the generated actions after vanilla creates them.
-        [HarmonyPatch("smethod_13")]
+        // EFT uses this method to generate available interactions for keycard doors.
+        // Allows AutoKeycard to modify the generated actions after vanilla creates them.
+        [HarmonyPatch(
+            "GetAvailableActions",
+            typeof(GamePlayerOwner),
+            typeof(KeycardDoor),
+            typeof(bool))]
         [HarmonyPostfix]
         public static void Postfix(
             GamePlayerOwner owner,
             KeycardDoor door,
             bool isProxy,
-            ref ActionsReturnClass __result)
+            ref AvailableInteractionState __result)
         {
             // Only modify locked keycard doors.
             // Normal doors and already unlocked doors should behave normally.
@@ -69,7 +74,7 @@ namespace AutoKeycard
                 Plugin.LogInfo("[AutoKeycard] Required keycard found");
             }
 
-            // Removes vanilla "Try Keycard" interactions so they cannot conflict with the AutoKeycard action.
+            // Removes vanilla keycard interactions so they cannot conflict with the AutoKeycard action.
             int removedActions = __result.Actions.RemoveAll(
                 action => action.Name.StartsWith("Try "));
 
@@ -78,7 +83,7 @@ namespace AutoKeycard
 
             // Add the custom interaction action.
             // It is disabled if the player does not have the required keycard.
-            __result.Actions.Add(new ActionsTypesClass
+            __result.Actions.Add(new InteractionAction
             {
                 Name = actionName,
                 Disabled = !hasRequiredCard,
@@ -104,7 +109,7 @@ namespace AutoKeycard
                     $"KeyId: {card.Key.Template.KeyId}");
 
                 // Ignore any keycards that do not belong to this door.
-                // This check prevents the original issue where incorrect cards could be selected.
+                // This prevents incorrect cards from being selected.
                 if (card.Key.Template.KeyId != door.KeyId)
                 {
                     Plugin.LogDebug(
@@ -112,8 +117,8 @@ namespace AutoKeycard
                     continue;
                 }
 
-                // EFT handles the actual unlock logic through UnlockOperation.
-                // This keeps the door opening behavior identical to vanilla.
+                // EFT handles keycard validation and creates the unlock interaction result.
+                // This keeps the door behavior identical to vanilla.
                 var result = door.UnlockOperation(
                     card.Key,
                     owner.Player,
@@ -142,7 +147,7 @@ namespace AutoKeycard
                     CommandStatus.Begin);
 
                 // Play the normal unlock animation and complete the operation.
-                owner.Player.vmethod_0(
+                owner.Player.StartInteraction(
                     door,
                     result.Value,
                     () =>

@@ -36,7 +36,7 @@ namespace AutoKeycard
         {
             try
             {
-                NotificationManagerClass.DisplayNotification(
+                NotificationManager.DisplayNotification(
                     new AutoKeycardNotification(message));
             }
             catch (System.Exception ex)

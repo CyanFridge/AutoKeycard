@@ -3,7 +3,7 @@ using EFT.Communications;
 
 namespace AutoKeycard
 {
-    public class AutoKeycardNotification : NotificationAbstractClass
+    public class AutoKeycardNotification : Notification
     {
         private readonly string _message;
 
