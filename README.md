@@ -1,37 +1,51 @@
 # AutoKeycard
 
-A quality-of-life scripting mod for **SPT (Single Player Tarkov)** that simplifies keycard door interactions by automatically selecting and using the correct keycard from the player's inventory.
+A quality-of-life mod for **SPT (Single Player Tarkov)** that automatically selects and uses the correct keycard when interacting with keycard doors.
 
-## Features
+No more searching through your inventory to find the right Labs keycard. Simply interact with the door, and AutoKeycard handles the rest.
 
-* Automatically detects locked keycard doors
-* Replaces vanilla keycard interaction options with a custom AutoKeycard action
-* Automatically selects the correct keycard
-* Prevents incorrect keycard attempts
-* Displays the required keycard name when missing one
-* Shows an in-game notification when a keycard is used
-* Uses EFT's native notification system
-* Configurable logging options
-* Debug logging support for troubleshooting
+## ✨ Features
 
-## How It Works
+* 🔑 Automatically uses the correct keycard from your inventory
+* 🚪 Replaces vanilla keycard interactions with a single **AutoKeycard** action
+* 🛡️ Prevents incorrect keycard attempts
+* 📋 Shows the required keycard name when you are missing one
+* 🔔 Optional notification showing which keycard was used
+* ⚙️ Configurable logging and debug options
+* ✅ Uses EFT's existing unlock system to preserve vanilla behavior
 
-AutoKeycard uses Harmony patches to modify EFT's interaction system.
+## Compatibility
 
-When a player interacts with a locked keycard door:
+AutoKeycard versions are tied to specific SPT versions:
 
-1. AutoKeycard checks the available interaction actions.
-2. Vanilla keycard actions are removed.
-3. A custom AutoKeycard action is added.
-4. The player's inventory is searched for a matching keycard.
-5. The keycard's `KeyId` is validated against the door's required `KeyId`.
-6. EFT's own unlock system is called to handle the door opening.
+| SPT Version | AutoKeycard Version |
+| ----------- | ------------------- |
+| SPT 4.0.x   | v1.0.0              |
+| SPT 4.1.x   | v1.0.1              |
 
-The mod does not bypass the normal unlock process. It uses EFT's existing unlock operations and events to preserve vanilla behavior.
+⚠️ Compatibility with future SPT versions is not guaranteed.
+
+## Installation
+
+1. Download the version of AutoKeycard that matches your SPT version.
+2. Extract the mod into your SPT `BepInEx/plugins` folder.
+3. Launch SPT and use keycard doors normally.
+
+## Does AutoKeycard bypass keycard requirements?
+
+No.
+
+AutoKeycard does **not** unlock doors without the required keycard. It does not remove keycard requirements or skip EFT's normal unlock process.
+
+The mod simply automates the normal process:
+
+1. Finds the correct keycard in your inventory.
+2. Selects the keycard for the interaction.
+3. Lets EFT handle the actual unlock operation.
 
 ## Configuration
 
-AutoKeycard includes configurable options through BepInEx Configuration Manager.
+AutoKeycard includes configurable options through **BepInEx Configuration Manager**.
 
 ### General
 
@@ -47,6 +61,19 @@ AutoKeycard includes configurable options through BepInEx Configuration Manager.
 | Enable Logging | Enabled  | Enables standard AutoKeycard logging  |
 | Debug Logging  | Disabled | Enables additional diagnostic logging |
 
+## How It Works (Technical)
+
+AutoKeycard uses Harmony patches to modify EFT's interaction system.
+
+When interacting with a locked keycard door:
+
+1. AutoKeycard detects the available keycard door interactions.
+2. Vanilla keycard actions are removed.
+3. A custom AutoKeycard action is added.
+4. The player's inventory is searched for a matching keycard.
+5. The keycard's `KeyId` is validated against the door's required `KeyId`.
+6. EFT's existing unlock operations and inventory events handle the rest.
+
 ## Technical Details
 
 AutoKeycard is built using:
@@ -58,43 +85,13 @@ AutoKeycard is built using:
 
 Main systems used:
 
-* `GetActionsClass` - Used to modify available interaction actions
-* `KeycardDoor` - Used for keycard door validation and unlocking
-* `NotificationManagerClass` - Used for in-game notifications
-
-## Project Structure
-
-```
-AutoKeycard/
-│
-├── Plugin.cs
-│   └── BepInEx plugin initialization
-│
-├── KeycardDoorPatch.cs
-│   └── Harmony patch handling keycard door interactions
-│
-├── AutoKeycardConfig.cs
-│   └── BepInEx configuration settings
-│
-├── AutoKeycardNotification.cs
-│   └── EFT notification implementation
-│
-└── PluginInfo.cs
-    └── Mod metadata and version information
-```
-
-## Compatibility
-
-Designed for:
-
-* SPT 4.x
-* Tarkov versions supported by the installed SPT release
-
-Compatibility with future SPT versions is not guaranteed.
+* `InteractionContextHelper` - Handles available interaction actions
+* `KeycardDoor` - Handles keycard door validation and unlocking
+* `NotificationManager` - Handles in-game notifications
 
 ## Credits
 
-Created by Cyan.
+Created by **CyanFridge**.
 
 Special thanks to the SPT modding community for documentation, tools, and reverse-engineering resources.
 
