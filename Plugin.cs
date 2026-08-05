@@ -28,7 +28,7 @@ namespace AutoKeycard
                 $"{PluginInfo.NAME} {PluginInfo.VERSION} loaded successfully!");
 
 
-            Harmony harmony = new Harmony("com.cyan.autokeycard");
+            Harmony harmony = new Harmony("com.cyanfridge.autokeycard");
             harmony.PatchAll();
         }
 
