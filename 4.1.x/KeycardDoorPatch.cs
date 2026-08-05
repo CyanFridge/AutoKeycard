@@ -89,7 +89,6 @@ namespace AutoKeycard
             });
         }
 
-
         // Attempts to unlock the door using the correct keycard from the player's inventory.
         private static void TryUnlock(
             GamePlayerOwner owner,
@@ -119,7 +118,6 @@ namespace AutoKeycard
                     card.Key,
                     owner.Player,
                     door);
-
                 if (result.Failed)
                 {
                     Plugin.LogDebug(
